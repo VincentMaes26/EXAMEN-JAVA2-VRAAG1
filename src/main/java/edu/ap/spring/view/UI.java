@@ -21,53 +21,76 @@ import edu.ap.spring.jpa.QuoteService;
 @Component
 public class UI implements InitializingBean {
 	private JFrame jFrame;
+	private JTextField txtFilter;
 	private JTextArea quotesArea;
-	private JButton btnAdd, btnShow, btnClear;
-	private JLabel lbl;
+	private JButton btnAdd, btnShow, btnFilter, btnClear;
+	private JLabel lblAdded;
+	private JPanel controlPanel1, controlPanel2;
 	
 	@Autowired
 	QuoteService service;
 	
 	public void setUp() {
 		jFrame = new JFrame("Spring JFrame");
-		jFrame.setSize(500, 1000);
-		jFrame.setLocationRelativeTo(null);
-		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		jFrame.getContentPane().setLayout(null);
-		
+    	jFrame.setLayout(new FlowLayout());
+    	controlPanel1 = new JPanel();
+    	controlPanel1.setLayout(new GridLayout(5,1,1,10));
+    	controlPanel2 = new JPanel();
+    	controlPanel2.setLayout(new GridLayout(5,1,1,10));
+    	
 		quotesArea = new JTextArea();
-		lbl = new JLabel();
+		quotesArea.setSize(300,500);	
+		lblAdded = new JLabel();
+		txtFilter = new JTextField();
 		
 		btnAdd = new JButton("Add quotes to database");
-		btnAdd.setBounds(100,13, 100,25);
+		btnAdd.setSize(100,25);
 		btnAdd.addActionListener(e -> {
 			service.saveQuotes();
-			lbl.setText("Quotes have been added to the database");
+			lblAdded.setText("Quotes have been added to the database");
 		});
-		jFrame.getContentPane().add(btnAdd);
 
 		
 		btnShow = new JButton("Show quotes");
-		btnAdd.setBounds(300,13, 100,25);
+		btnShow.setSize(100,25);
 		btnShow.addActionListener(e -> {
 			List<Quote> quoteList = service.getQuotes();
 			for(Quote q : quoteList) {
 				quotesArea.append(q.toString() + "\n");
 			}
 		});
-		jFrame.getContentPane().add(btnShow);
+		
+		btnFilter = new JButton("Show filtered quotes");
+		btnFilter.setSize(100,25);
+		btnFilter.addActionListener(e -> {
+			String keyword = txtFilter.getText();
+			List<Quote> quoteList = service.findByKeyWord(keyword);
+			for(Quote q : quoteList) {
+				quotesArea.append(q.toString() + "\n");
+			}
+		});
 		
 		btnClear = new JButton("Clear");
-		btnClear.setBounds(100,550, 100, 25);
+		btnClear.setSize(100,50);
 		btnClear.addActionListener(e ->{
 			quotesArea.setText("");
 		});
 
-		quotesArea.setBounds(100,25,500,1000);
-		
-		jFrame.getContentPane().add(quotesArea);
-		jFrame.getContentPane().add(btnClear);
+		controlPanel1.add(btnAdd);
+    	controlPanel1.add(btnShow);
+    	controlPanel1.add(txtFilter);
+    	controlPanel1.add(btnFilter);
+    	controlPanel1.add(lblAdded);
+    	controlPanel2.add(quotesArea);
+    	controlPanel1.add(btnClear);
 
+		
+    	jFrame.add(controlPanel1);
+    	jFrame.add(controlPanel2);
+		jFrame.setSize(600, 400);
+		jFrame.pack();
+    	jFrame.setLocationRelativeTo(null);
+    	jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jFrame.setVisible(true);
 	}
 	
