@@ -31,9 +31,10 @@ public class UI implements InitializingBean {
 	QuoteService service;
 	
 	public void setUp() {
-		jFrame = new JFrame("Spring JFrame");
+		jFrame = new JFrame("Quotes App");
     	jFrame.setLayout(new FlowLayout());
     	controlPanel1 = new JPanel();
+    	
     	controlPanel1.setLayout(new GridLayout(5,1,1,10));
     	controlPanel2 = new JPanel();
     	controlPanel2.setLayout(new GridLayout(5,1,1,10));
@@ -87,7 +88,7 @@ public class UI implements InitializingBean {
 		
     	jFrame.add(controlPanel1);
     	jFrame.add(controlPanel2);
-		jFrame.setSize(600, 400);
+		jFrame.setSize(1000, 750);
 		jFrame.pack();
     	jFrame.setLocationRelativeTo(null);
     	jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
